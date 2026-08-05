@@ -8,7 +8,7 @@ pages_build_output_dir = "."
 [[d1_databases]]
 binding = "DB"
 database_name = "danla_wecare_hub"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "8c9917b5-f90c-4e20-a299-71575ff5ec23"
 
 # R2 bucket binding, available to functions/api/[[path]].js as env.R2_BUCKET
 [[r2_buckets]]
