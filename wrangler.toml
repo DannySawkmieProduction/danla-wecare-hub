@@ -13,7 +13,7 @@ database_id = "8c9917b5-f90c-4e20-a299-71575ff5ec23"
 # R2 bucket binding, available to functions/api/[[path]].js as env.R2_BUCKET
 [[r2_buckets]]
 binding = "R2_BUCKET"
-bucket_name = "REPLACE_WITH_YOUR_R2_BUCKET_NAME"
+bucket_name = "danla-wecare-files"
 
 # Non-secret configuration values only.
 # ADMIN_PASSWORD_HASH and UPLOAD_API_KEY are NOT defined here — they are
@@ -24,5 +24,5 @@ bucket_name = "REPLACE_WITH_YOUR_R2_BUCKET_NAME"
 ADMIN_USERNAME = "admin"
 STUDENT_GOOGLE_CLIENT_ID = "REPLACE_WITH_STUDENT_GOOGLE_CLIENT_ID"
 TEACHER_GOOGLE_CLIENT_ID = "REPLACE_WITH_TEACHER_GOOGLE_CLIENT_ID"
-R2_BUCKET_NAME = "REPLACE_WITH_YOUR_R2_BUCKET_NAME"
+R2_BUCKET_NAME = "danla-wecare-files"
 MAX_UPLOAD_SIZE = "52428800"
