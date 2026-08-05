@@ -98,7 +98,7 @@
   <script src="js/d1-sync.js" defer></script>
   <script src="js/perf.js" defer></script>
   <script src="js/institution.js" defer></script>
-  <!-- non-critical helper: uploaded lazily to improve startup -->
-  <script data-lazy data-src="js/upload.js"></script>
+  <!-- non-critical helper: uploaded lazily to improve startup. ES module (upload.js uses export), so data-type="module" is required. -->
+  <script data-lazy data-src="js/upload.js" data-type="module"></script>
 </body>
 </html>
