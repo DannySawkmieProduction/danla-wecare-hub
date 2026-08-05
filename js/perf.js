@@ -4,9 +4,10 @@
   window.requestIdleCallback = window.requestIdleCallback || function(cb){ return setTimeout(()=>cb({ didTimeout:false, timeRemaining: ()=> 50 }), 1); };
   window.cancelIdleCallback = window.cancelIdleCallback || function(id){ clearTimeout(id); };
 
-  function loadScript(src, opts={ async:true, defer:true, integrity: null, crossorigin: null }){
+  function loadScript(src, opts={ async:true, defer:true, type:null, integrity: null, crossorigin: null }){
     return new Promise((resolve,reject)=>{
-      const s = document.createElement('script'); s.src = src; s.async = !!opts.async; s.defer = !!opts.defer;
+      const s = document.createElement('script'); s.src = src;
+      if(opts.type){ s.type = opts.type; } else { s.async = !!opts.async; s.defer = !!opts.defer; }
       if(opts.integrity) s.integrity = opts.integrity;
       if(opts.crossorigin) s.crossOrigin = opts.crossorigin;
       s.onload = ()=> resolve(s); s.onerror = ()=> reject(new Error('Failed to load '+src)); document.head.appendChild(s);
@@ -20,7 +21,8 @@
       nodes.forEach(n=>{
         const src = n.getAttribute('data-src') || n.src;
         if(!src) return;
-        loadScript(src, { async:true, defer:true }).catch(()=>{});
+        const type = n.getAttribute('data-type') || null;
+        loadScript(src, { async:true, defer:true, type }).catch(()=>{});
       });
     });
   }
