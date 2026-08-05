@@ -1,5 +1,5 @@
 name = "danla-wecare-hub"
-compatibility_date = "2026-08-06"
+compatibility_date = "2026-08-05"
 
 # Cloudflare Pages project (static site root, no build step required).
 pages_build_output_dir = "."
