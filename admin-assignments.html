@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Assignment, Project & Presentation | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage assignments, projects and presentations within the administrator portal.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">AP</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Assignment, Project & Presentation</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-exams.html">Examinations</a>
+        <a href="admin-attendance.html">Attendance</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell class-shell">
+      <section class="class-panel">
+        <div class="class-header">
+          <div>
+            <p class="eyebrow">Assignments toolkit</p>
+            <h2>Manage assignments, projects & presentations</h2>
+            <p>Create, schedule, and manage all assignment types and student submissions.</p>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <button id="new-assign-button" class="button button-primary">New Item</button>
+            <button id="export-assignments" class="button button-secondary">Export CSV</button>
+            <label class="button button-secondary" for="import-assignments-input" style="margin:0">Import CSV
+              <input id="import-assignments-input" type="file" accept="text/csv" style="display:none">
+            </label>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <label for="assign-filter-type">Type</label>
+              <select id="assign-filter-type"><option value="">All</option><option value="Assignment">Assignment</option><option value="Project">Project</option><option value="Presentation">Presentation</option></select>
+              <label for="assign-filter-dept">Dept</label>
+              <select id="assign-filter-dept"><option value="">All</option></select>
+              <label for="assign-filter-class">Class</label>
+              <select id="assign-filter-class"><option value="">All</option></select>
+              <label for="assign-filter-status">Status</label>
+              <select id="assign-filter-status"><option value="">All</option><option value="Draft">Draft</option><option value="Published">Published</option><option value="Closed">Closed</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="class-search">
+          <label for="assign-search-input">Search items</label>
+          <input id="assign-search-input" type="search" placeholder="Search by title, subject, faculty, year, semester, or instructions">
+        </div>
+
+        <div class="class-list" id="assign-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Administrator assignments management.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/admin-assignments.js" defer></script>
+</body>
+</html>

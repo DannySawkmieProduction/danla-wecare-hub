@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Admin Login | DanLa WeCare Hub</title>
+  <meta name="description" content="Administrator sign-in for DanLa WeCare Hub.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <p class="eyebrow" data-inst="name" data-inst-fallback="DanLa WeCare Hub">DanLa WeCare Hub</p>
+          <h1>Administrator Login</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <section class="auth-panel">
+        <div class="auth-header">
+          <p class="eyebrow">Secure access</p>
+          <h2>Sign in with your administrator credentials</h2>
+          <p>Use the authorized admin account to open the protected dashboard. Username and password authentication is required.</p>
+        </div>
+
+        <form id="admin-login-form" class="auth-form">
+          <label for="admin-username">Username</label>
+          <input id="admin-username" name="admin-username" type="text" autocomplete="username" required>
+
+          <label for="admin-password">Password</label>
+          <input id="admin-password" name="admin-password" type="password" autocomplete="current-password" required>
+
+          <button class="button button-primary" type="submit">Sign in</button>
+          <p id="admin-login-status" class="status-text" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Administrator access only.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+</body>
+</html>

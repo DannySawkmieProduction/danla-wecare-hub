@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Student Management | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage students within the administrator portal.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Student Management</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-timetable.html">Timetable</a>
+        <a href="admin-attendance.html">Attendance</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell subject-shell">
+      <section class="subject-panel">
+        <div class="subject-header">
+          <div>
+            <p class="eyebrow">Student toolkit</p>
+            <h2>Manage students</h2>
+            <p>Create, update, search, and remove student records. Link students to departments, subjects, and classes.</p>
+          </div>
+          <button id="new-student-button" class="button button-primary">New Student</button>
+        </div>
+
+        <div class="subject-search">
+          <label for="student-search-input">Search students</label>
+          <input id="student-search-input" type="search" placeholder="Search by name, id, email, department, class, or status">
+        </div>
+
+        <div class="subject-list" id="student-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Administrator student management.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/admin-students.js" defer></script>
+</body>
+</html>

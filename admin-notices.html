@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Admin — Notices | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage notices and announcements.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Notice Board</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-resources.html">Resources</a>
+        <a href="admin-notices.html">Notices</a>
+        <a href="admin-timetable.html">Timetable</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <section class="admin-panel">
+        <div class="dashboard-header">
+          <div>
+            <p class="eyebrow">Announcements</p>
+            <h2>Manage Notices & Announcements</h2>
+            <p>Create and publish notices for teachers, students, or specific departments.</p>
+          </div>
+          <div class="dashboard-actions">
+            <button id="new-notice-button" class="button button-primary">New Notice</button>
+          </div>
+        </div>
+
+        <div class="filters-row">
+          <input id="notice-search" placeholder="Search title, description, category" />
+          <select id="notice-filter-category"><option value="">All Categories</option><option>General</option><option>Exam</option><option>Event</option><option>Reminder</option></select>
+          <select id="notice-filter-audience"><option value="">All Audience</option><option value="All">All</option><option value="Teachers">Teachers</option><option value="Students">Students</option><option value="Department">Department</option></select>
+          <select id="notice-filter-dept"><option value="">All Departments</option></select>
+          <select id="notice-filter-priority"><option value="">All Priorities</option><option value="Low">Low</option><option value="Normal">Normal</option><option value="High">High</option><option value="Urgent">Urgent</option></select>
+          <select id="notice-filter-status"><option value="">All Status</option><option value="Draft">Draft</option><option value="Published">Published</option><option value="Expired">Expired</option></select>
+        </div>
+
+        <div id="notices-stats" class="dashboard-grid" style="margin-top:1rem"></div>
+
+        <div id="notice-list" class="cards-grid" style="margin-top:1rem"></div>
+
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Notice Board.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/admin-notices.js" defer></script>
+</body>
+</html>

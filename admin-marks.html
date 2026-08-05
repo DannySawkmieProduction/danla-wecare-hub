@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Marks & Grades | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage student marks and grades within the administrator portal.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Marks & Grades Management</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-exams.html">Examinations</a>
+        <a href="admin-attendance.html">Attendance</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell class-shell">
+      <section class="class-panel">
+        <div class="class-header">
+          <div>
+            <p class="eyebrow">Marks toolkit</p>
+            <h2>Manage marks and grades</h2>
+            <p>Enter student marks, calculate grades and GPA, view ranks, and export results.</p>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <button id="new-mark-button" class="button button-primary">New Mark</button>
+            <button id="configure-grading" class="button button-secondary">Configure Grading</button>
+            <button id="export-marks" class="button button-secondary">Export CSV</button>
+            <label class="button button-secondary" for="import-marks-input" style="margin:0">Import CSV
+              <input id="import-marks-input" type="file" accept="text/csv" style="display:none">
+            </label>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <label for="marks-filter-exam">Exam</label>
+              <select id="marks-filter-exam"><option value="">All</option></select>
+              <label for="marks-filter-class">Class</label>
+              <select id="marks-filter-class"><option value="">All</option></select>
+              <label for="marks-filter-status">Status</label>
+              <select id="marks-filter-status"><option value="">All</option><option value="Pass">Pass</option><option value="Fail">Fail</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="class-search">
+          <label for="marks-search-input">Search marks</label>
+          <input id="marks-search-input" type="search" placeholder="Search by student, exam, subject, class, or faculty">
+        </div>
+
+        <div class="class-list" id="marks-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Administrator marks management.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/admin-marks.js" defer></script>
+</body>
+</html>

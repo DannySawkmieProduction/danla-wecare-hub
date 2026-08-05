@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Admin — Resource Library | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage learning materials and resource library.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Resource Library</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-resources.html">Resources</a>
+        <a href="admin-timetable.html">Timetable</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <section class="admin-panel">
+        <div class="dashboard-header">
+          <div>
+            <p class="eyebrow">Learning Materials</p>
+            <h2>Manage Resource Library</h2>
+            <p>Create, edit and publish course materials for departments, classes and subjects.</p>
+          </div>
+          <div class="dashboard-actions">
+            <button id="new-resource-button" class="button button-primary">New Resource</button>
+          </div>
+        </div>
+
+        <div class="filters-row">
+          <input id="resource-search" placeholder="Search title, topic, description, subject" />
+          <select id="resource-filter-type"><option value="">All Types</option><option>Notes</option><option>PDF</option><option>PPT</option><option>DOC</option><option>Video</option><option>External</option></select>
+          <select id="resource-filter-dept"><option value="">All Departments</option></select>
+          <select id="resource-filter-class"><option value="">All Classes</option></select>
+          <select id="resource-filter-status"><option value="">All Status</option><option value="Draft">Draft</option><option value="Published">Published</option></select>
+          <button id="export-resources" class="button button-secondary">Export CSV</button>
+          <label class="button button-secondary" for="import-resources-input">Import CSV<input id="import-resources-input" type="file" accept="text/csv" style="display:none"></label>
+        </div>
+
+        <div id="resources-stats" class="dashboard-grid" style="margin-top:1rem"></div>
+
+        <div id="resource-list" class="cards-grid" style="margin-top:1rem"></div>
+
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Resource management.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/admin-resources.js" defer></script>
+</body>
+</html>

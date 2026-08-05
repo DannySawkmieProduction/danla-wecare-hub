@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Teacher Dashboard | DanLa WeCare Hub</title>
+  <meta name="description" content="Protected teacher dashboard for DanLa WeCare Hub.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <div>
+          <p class="eyebrow">Teacher Portal</p>
+          <p class="eyebrow" data-inst="name" data-inst-fallback="DanLa WeCare Hub">DanLa WeCare Hub</p>
+          <h1>Teacher Dashboard</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <button id="teacher-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <section class="admin-panel">
+        <div class="dashboard-header">
+          <div>
+            <p class="eyebrow">Teacher access</p>
+            <h2>Welcome back, teacher</h2>
+            <p>Manage your classes, assignments, and curriculum tools from this secure dashboard.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <h4>Classroom tools</h4>
+            <p>Access your course materials, attendance and student progress modules.</p>
+          </div>
+          <div class="dashboard-card">
+            <h4>Assignments</h4>
+            <p>Create and review assignments while staying connected to institutional workflows.</p>
+          </div>
+          <div class="dashboard-card">
+            <h4>Student insights</h4>
+            <p>Monitor student progress and attendance from a central teacher portal.</p>
+          </div>
+          <div class="dashboard-card">
+            <h4>Support</h4>
+            <p>Request administrator assistance or update your teacher profile settings.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Teacher dashboard.</p>
+    </footer>
+  </div>
+
+  <script src="js/teacher-auth.js" defer></script>
+  <script src="js/d1-sync.js" defer></script>
+  <script src="js/perf.js" defer></script>
+  <script src="js/institution.js" defer></script>
+</body>
+</html>

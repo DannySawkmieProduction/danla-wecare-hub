@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DanLa WeCare Hub</title>
+  <meta name="description" content="DanLa WeCare Hub is a secure academic management PWA for schools, colleges and coaching institutions.">
+  <meta name="theme-color" content="#0B0E11">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <div>
+          <p class="eyebrow">Enterprise Academic PWA</p>
+          <h1><span data-inst="name" data-inst-fallback="DanLa WeCare Hub">DanLa WeCare Hub</span></h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="#features">Features</a>
+        <a href="#why">Why choose us</a>
+        <a href="student-login.html">Student</a>
+        <a href="teacher-login.html">Teacher</a>
+        <a href="admin-login.html">Admin</a>
+        <button class="button button-secondary install-trigger hidden" type="button">Install App</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Modern academic management for every institution</p>
+          <h2>Secure dashboards, offline support and installable workflows for teachers, students, and administrators.</h2>
+          <p>DanLa WeCare Hub delivers permanent academic records, role-based access and an engaging PWA experience powered by modern browser standards.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#features">Explore Features</a>
+            <a class="button button-secondary" href="student-login.html">Student Login</a>
+            <a class="button button-secondary" href="teacher-login.html">Teacher Login</a>
+            <a class="button button-secondary" href="admin-login.html">Admin Login</a>
+            <button class="button button-secondary install-trigger" type="button">Install App</button>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="visual-panel">
+            <span>Teacher</span>
+            <span>Student</span>
+            <span>Analytics</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features-grid">
+        <article class="feature-card">
+          <h3>Role-Based Dashboards</h3>
+          <p>Separate administrator, teacher and student journeys with secure navigation and permission validation.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Offline-first PWA</h3>
+          <p>Installable experience with cached resources for better availability and performance on weak networks.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Academic Management</h3>
+          <p>Attendance, assignments, tests, certificates and student analytics in a single enterprise-grade platform.</p>
+        </article>
+      </section>
+
+      <section id="why" class="info-panel">
+        <div>
+          <p class="eyebrow">Built for institutions</p>
+          <h2>Enterprise-grade performance with a premium education experience.</h2>
+          <p>Designed with security, accessibility and maintainability in mind, DanLa WeCare Hub is ready for real-world academic operations.</p>
+        </div>
+        <div class="info-list">
+          <div>
+            <h4>Secure authentication</h4>
+            <p>Google OAuth for teachers only and protected administrator login ensure both roles sign in through authorized channels.</p>
+          </div>
+          <div>
+            <h4>Progressive enhancements</h4>
+            <p>Fast load times, smooth transitions and responsive layouts across desktop and mobile devices.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Designed for education institutions.</p>
+    </footer>
+  </div>
+
+  <script src="js/app.js" defer></script>
+  <script src="js/d1-sync.js" defer></script>
+  <script src="js/perf.js" defer></script>
+  <script src="js/institution.js" defer></script>
+  <!-- non-critical helper: uploaded lazily to improve startup -->
+  <script data-lazy data-src="js/upload.js"></script>
+</body>
+</html>

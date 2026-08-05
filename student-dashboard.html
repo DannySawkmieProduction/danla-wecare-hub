@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Student Dashboard | DanLa WeCare Hub</title>
+  <meta name="description" content="Protected student dashboard for DanLa WeCare Hub.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <div>
+          <p class="eyebrow">Student Portal</p>
+          <p class="eyebrow" data-inst="name" data-inst-fallback="DanLa WeCare Hub">DanLa WeCare Hub</p>
+          <h1>Student Dashboard</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <button id="student-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <section class="admin-panel">
+        <div class="dashboard-header">
+          <div>
+            <p class="eyebrow">Student access</p>
+            <h2>Welcome back</h2>
+            <p>Access your coursework, attendance, and student tools from this protected dashboard.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <h4>Coursework</h4>
+            <p>Review assignments and grades in a secure student workspace.</p>
+            <a class="button button-secondary" href="student-assignments.html">View assignments</a>
+          </div>
+          <div class="dashboard-card">
+            <h4>Attendance</h4>
+            <p>Track your schedule and maintain attendance records.</p>
+          </div>
+          <div class="dashboard-card">
+            <h4>Resources</h4>
+            <p>Access classroom materials, announcements, and student support.</p>
+          </div>
+          <div class="dashboard-card">
+            <h4>Support</h4>
+            <p>Contact administrators and teachers directly from the student portal.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Student dashboard.</p>
+    </footer>
+  </div>
+
+  <script src="js/student-auth.js" defer></script>
+  <script src="js/d1-sync.js" defer></script>
+  <script src="js/perf.js" defer></script>
+  <script src="js/institution.js" defer></script>
+</body>
+</html>

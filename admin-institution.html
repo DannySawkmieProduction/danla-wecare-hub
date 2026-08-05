@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Admin — Institution Profile | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage institution profile and official settings.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Institution Profile</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-resources.html">Resources</a>
+        <a href="admin-notices.html">Notices</a>
+        <a href="admin-reports.html">Reports</a>
+        <a href="admin-timetable.html">Timetable</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <section class="admin-panel">
+        <div class="dashboard-header">
+          <div>
+            <p class="eyebrow">Settings</p>
+            <h2>Institution Profile</h2>
+            <p>Manage official institution details used across the application and exported documents.</p>
+          </div>
+        </div>
+
+        <form id="institution-form" class="card" style="max-width:900px;margin-top:1rem">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+            <label>Institution Name<input id="inst-name" type="text"></label>
+            <label>Short Name<input id="inst-short" type="text"></label>
+            <label>Logo URL<input id="inst-logo" type="url" placeholder="/icons/logo.svg"></label>
+            <label>Seal/Emblem URL<input id="inst-seal" type="url" placeholder="/icons/seal.svg"></label>
+            <label>Address<textarea id="inst-address"></textarea></label>
+            <label>City<input id="inst-city" type="text"></label>
+            <label>State<input id="inst-state" type="text"></label>
+            <label>Country<input id="inst-country" type="text"></label>
+            <label>PIN Code<input id="inst-pin" type="text"></label>
+            <label>Phone Number<input id="inst-phone" type="text"></label>
+            <label>Official Email<input id="inst-email" type="email"></label>
+            <label>Website<input id="inst-website" type="url"></label>
+            <label>Principal/Head Name<input id="inst-principal" type="text"></label>
+            <label>Principal Designation<input id="inst-principal-designation" type="text"></label>
+            <label>Institution Code<input id="inst-code" type="text"></label>
+            <label>Affiliation/Board<input id="inst-affiliation" type="text"></label>
+            <label>Accreditation Details<textarea id="inst-accreditation"></textarea></label>
+            <label>Academic Year<input id="inst-year" type="text"></label>
+            <label>Current Semester<input id="inst-sem" type="text"></label>
+          </div>
+
+          <div style="margin-top:0.5rem;display:flex;gap:0.5rem">
+            <button class="button button-primary" type="submit">Save Institution Profile</button>
+            <button class="button button-secondary" id="reset-institution" type="button">Reset</button>
+          </div>
+        </form>
+
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Institution settings.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/institution.js" defer></script>
+  <script src="js/admin-institution.js" defer></script>
+</body>
+</html>

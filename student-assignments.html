@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Student Assignments | DanLa WeCare Hub</title>
+  <meta name="description" content="View and submit assignments (student portal)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <div>
+          <p class="eyebrow">Student Portal</p>
+          <p class="eyebrow" data-inst="name" data-inst-fallback="DanLa WeCare Hub">DanLa WeCare Hub</p>
+          <h1>Assignments</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="student-dashboard.html">Dashboard</a>
+        <a href="index.html">Home</a>
+        <button id="student-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell class-shell">
+      <section class="class-panel">
+        <div class="class-header">
+          <div>
+            <p class="eyebrow">Student assignments</p>
+            <h2>Your assigned coursework</h2>
+            <p>View published assignments, submit work, and track submission status.</p>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <label for="student-select">You (select)</label>
+            <select id="student-select"><option value="">Select student</option></select>
+            <label for="student-filter-type">Type</label>
+            <select id="student-filter-type"><option value="">All</option><option value="Assignment">Assignment</option><option value="Project">Project</option><option value="Presentation">Presentation</option></select>
+            <label for="student-filter-class">Class</label>
+            <select id="student-filter-class"><option value="">All</option></select>
+          </div>
+        </div>
+
+        <div class="class-search">
+          <label for="student-assign-search">Search</label>
+          <input id="student-assign-search" type="search" placeholder="Search by title or subject">
+        </div>
+
+        <div class="class-list" id="student-assign-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Student assignments.</p>
+    </footer>
+  </div>
+
+  <script src="js/student-auth.js" defer></script>
+  <script src="js/student-assignments.js" defer></script>
+  <script src="js/d1-sync.js" defer></script>
+  <script src="js/perf.js" defer></script>
+  <script src="js/institution.js" defer></script>
+</body>
+</html>

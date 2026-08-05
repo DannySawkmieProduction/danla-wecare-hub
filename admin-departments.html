@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Department Management | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage academic departments within the administrator portal.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Department Management</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-timetable.html">Timetable</a>
+        <a href="admin-attendance.html">Attendance</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell department-shell">
+      <section class="department-panel">
+        <div class="department-header">
+          <div>
+            <p class="eyebrow">Department toolkit</p>
+            <h2>Manage departments</h2>
+            <p>Create, update, search, and remove academic departments from the secure administrator portal.</p>
+          </div>
+          <button id="new-department-button" class="button button-primary">New Department</button>
+        </div>
+
+        <div class="department-search">
+          <label for="department-search-input">Search departments</label>
+          <input id="department-search-input" type="search" placeholder="Search by name, code, head, or status">
+        </div>
+
+        <div class="department-list" id="department-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Administrator department management.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/admin-departments.js" defer></script>
+</body>
+</html>

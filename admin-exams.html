@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Examination Management | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage examinations within the administrator portal.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">E</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Examination Management</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-timetable.html">Timetable</a>
+        <a href="admin-attendance.html">Attendance</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell class-shell">
+      <section class="class-panel">
+        <div class="class-header">
+          <div>
+            <p class="eyebrow">Exam management</p>
+            <h2>Manage examinations</h2>
+            <p>Create and schedule examinations, assign invigilators, and manage exam statuses.</p>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <button id="new-exam-button" class="button button-primary">New Exam</button>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <label for="exam-filter-dept">Dept</label>
+              <select id="exam-filter-dept">
+                <option value="">All</option>
+              </select>
+              <label for="exam-filter-status">Status</label>
+              <select id="exam-filter-status">
+                <option value="">All</option>
+                <option value="Scheduled">Scheduled</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+              <label for="exam-sort-select">Sort</label>
+              <select id="exam-sort-select">
+                <option value="date_desc">Date (newest)</option>
+                <option value="date_asc">Date (oldest)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="class-search">
+          <label for="exam-search-input">Search examinations</label>
+          <input id="exam-search-input" type="search" placeholder="Search by type, year, semester, dept, class, subject, invigilator, venue, or status">
+        </div>
+
+        <div class="class-list" id="exam-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Administrator examination management.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/admin-exams.js" defer></script>
+</body>
+</html>

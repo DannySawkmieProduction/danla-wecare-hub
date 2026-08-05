@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Attendance Management | DanLa WeCare Hub</title>
+  <meta name="description" content="Manage attendance within the administrator portal.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <h1>Attendance Management</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+        <a href="admin-timetable.html">Timetable</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell class-shell">
+      <section class="class-panel">
+        <div class="class-header">
+          <div>
+            <p class="eyebrow">Attendance toolkit</p>
+            <h2>Manage attendance</h2>
+            <p>Mark attendance for students, view and edit records, or perform bulk marking for a class.</p>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <button id="new-attendance-button" class="button button-primary">New Record</button>
+            <button id="export-attendance" class="button button-secondary" type="button">Export CSV</button>
+            <label class="button button-secondary" for="import-attendance-input" style="margin:0">Import CSV
+              <input id="import-attendance-input" type="file" accept="text/csv" style="display:none">
+            </label>
+            <button id="attendance-calendar" class="button button-secondary" type="button">Calendar Summary</button>
+          </div>
+        </div>
+
+        <div class="class-search">
+          <label for="attendance-search-input">Search attendance</label>
+          <input id="attendance-search-input" type="search" placeholder="Search by year, semester, dept, class, subject, faculty, student, date, or status">
+        </div>
+
+        <div class="class-list" id="attendance-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Administrator attendance management.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/admin-attendance.js" defer></script>
+</body>
+</html>

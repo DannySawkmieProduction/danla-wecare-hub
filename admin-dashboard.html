@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Admin Dashboard | DanLa WeCare Hub</title>
+  <meta name="description" content="Protected administrator dashboard for DanLa WeCare Hub.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <div>
+          <p class="eyebrow">Admin Portal</p>
+          <p class="eyebrow" data-inst="name" data-inst-fallback="DanLa WeCare Hub">DanLa WeCare Hub</p>
+          <h1>Administrator Dashboard</h1>
+        </div>
+      </div>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="admin-departments.html">Departments</a>
+        <a href="admin-subjects.html">Subjects</a>
+        <a href="admin-classes.html">Classes</a>
+        <a href="admin-students.html">Students</a>
+        <a href="admin-faculty.html">Faculty</a>
+      <a href="admin-resources.html">Resources</a>
+      <a href="admin-notices.html">Notices</a>
+      <a href="admin-reports.html">Reports</a>
+      <a href="admin-institution.html">Institution</a>
+        <a href="admin-timetable.html">Timetable</a>
+        <a href="admin-attendance.html">Attendance</a>
+        <a href="admin-exams.html">Examinations</a>
+        <a href="admin-marks.html">Marks & Grades</a>
+        <a href="admin-assignments.html">Assignment, Project & Presentation</a>
+        <a href="index.html">Home</a>
+        <button id="admin-logout-button" class="button button-secondary" type="button">Sign out</button>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <section class="admin-panel">
+        <div class="dashboard-header">
+          <div>
+            <p class="eyebrow">Protected area</p>
+            <h2>Welcome, administrator</h2>
+            <p>Manage system settings, review access controls, and configure the platform from this secure console.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <h4>Quick access</h4>
+            <p>Jump directly into the most important modules for day-to-day administration.</p>
+            <ul class="dashboard-links">
+              <li><a href="admin-departments.html">Departments</a></li>
+              <li><a href="admin-students.html">Students</a></li>
+              <li><a href="admin-assignments.html">Assignments</a></li>
+              <li><a href="admin-reports.html">Reports</a></li>
+            </ul>
+          </div>
+          <div class="dashboard-card">
+            <h4>Security monitoring</h4>
+            <p>Protect your institution by keeping administrator access limited and session state secure.</p>
+          </div>
+          <div class="dashboard-card">
+            <h4>Application options</h4>
+            <p>Update user permissions, feature availability, and system maintenance settings.</p>
+          </div>
+          <div class="dashboard-card">
+            <h4>Support tools</h4>
+            <p>Review logs and administration reports from a single protected experience.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 DanLa WeCare Hub. Administrator dashboard.</p>
+    </footer>
+  </div>
+
+  <script src="js/perf.js" defer></script>
+  <script src="js/institution.js" defer></script>
+  <script src="js/admin-auth.js" defer></script>
+  <script src="js/d1-sync.js" defer></script>
+  <!-- upload helper is non-critical for initial auth flow -->
+  <script data-lazy data-src="js/upload.js"></script>
+</body>
+</html>
