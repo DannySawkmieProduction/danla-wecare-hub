@@ -54,7 +54,19 @@ function isStudentAuthenticated() {
 }
 
 function getCurrentPage() {
-  return window.location.pathname.split('/').pop();
+  // Cloudflare Pages serves static HTML with the .html extension stripped
+  // from the URL by default (e.g. /student-login.html -> /student-login).
+  // This normalizes the current path back to a canonical "<name>.html"
+  // form so page-matching below works the same whether the browser shows
+  // "/student-login" or "/student-login.html".
+  let page = window.location.pathname.split('/').pop();
+  if (!page) {
+    page = 'index.html';
+  }
+  if (!page.endsWith('.html')) {
+    page += '.html';
+  }
+  return page;
 }
 
 function redirectToLogin() {
