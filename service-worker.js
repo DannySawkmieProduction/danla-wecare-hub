@@ -23,7 +23,9 @@ const PRECACHE = [
   '/student-login.html',
   '/student-dashboard.html',
   '/styles.css',
+  '/landing.css',
   '/js/app.js',
+  '/js/landing.js',
   '/js/admin-auth.js',
   '/js/admin-departments.js',
   '/js/admin-subjects.js',
@@ -53,7 +55,7 @@ const PRECACHE = [
 
 const RUNTIME = 'runtime-cache-v1';
 const IMAGE_CACHE = 'images-cache-v1';
-const PRECACHE_NAME = 'precache-v1';
+const PRECACHE_NAME = 'precache-v2';
 const MAX_IMAGE_ENTRIES = 60;
 
 async function trimCache(cacheName, maxItems){
