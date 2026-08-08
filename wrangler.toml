@@ -1,28 +1,56 @@
-name = "danla-wecare-hub"
-compatibility_date = "2026-08-05"
+# DanLa WeCare Hub — Cloudflare Pages configuration
+#
+# This project deploys as a single Cloudflare Pages project using "Advanced
+# Mode": the _worker.js file at the project root (see /_worker.js) handles
+# every request — static assets AND /api/* — through one deployment. There
+# is no separate Cloudflare Worker to deploy, no custom domain/zone
+# requirement, and no Worker Route to configure. `wrangler pages deploy .`
+# (or a git-connected Pages build) is the only deployment step.
+#
+# Replace every <PLACEHOLDER> below before deploying. See DEPLOYMENT.md for
+# the full walkthrough, including how to create the D1 database and R2
+# bucket these bindings point at.
+#
+# If your Wrangler version does not yet support configuring a Pages
+# project's bindings via this file (pages_build_output_dir), configure the
+# same bindings and variables in the dashboard instead: Pages project ->
+# Settings -> Functions -> D1 database bindings / R2 bucket bindings /
+# Environment variables. Both paths produce the same running configuration.
 
-# Cloudflare Pages project (static site root, no build step required).
+name = "danla-wecare-hub"
+compatibility_date = "2026-08-06"
 pages_build_output_dir = "."
 
-# D1 database binding, available to functions/api/[[path]].js as env.DB
 [[d1_databases]]
 binding = "DB"
 database_name = "danla_wecare_hub"
-database_id = "8c9917b5-f90c-4e20-a299-71575ff5ec23"
+database_id = "<YOUR_D1_DATABASE_ID>"
 
-# R2 bucket binding, available to functions/api/[[path]].js as env.R2_BUCKET
 [[r2_buckets]]
 binding = "R2_BUCKET"
-bucket_name = "danla-wecare-files"
+bucket_name = "<YOUR_R2_BUCKET_NAME>"
 
-# Non-secret configuration values only.
-# ADMIN_PASSWORD_HASH and UPLOAD_API_KEY are NOT defined here — they are
-# secrets and must be set with `wrangler pages secret put <NAME>` or via
-# the Cloudflare Dashboard (Pages project -> Settings -> Environment variables
-# -> Encrypt), never committed to this file.
 [vars]
+# Admin login (see workers/d1-api.js). ADMIN_PASSWORD_HASH is the lowercase
+# hex SHA-256 digest of the admin password — never the plaintext password.
 ADMIN_USERNAME = "admin"
-STUDENT_GOOGLE_CLIENT_ID = "REPLACE_WITH_STUDENT_GOOGLE_CLIENT_ID"
-TEACHER_GOOGLE_CLIENT_ID = "REPLACE_WITH_TEACHER_GOOGLE_CLIENT_ID"
-R2_BUCKET_NAME = "danla-wecare-files"
+ADMIN_PASSWORD_HASH = "<SHA256_PASSWORD_HASH>"
+
+# Signs and verifies session cookies (see workers/auth.js). Use a long,
+# random value — e.g. `openssl rand -hex 32`. If left as the placeholder,
+# the server derives a working key from ADMIN_PASSWORD_HASH instead, but a
+# dedicated secret is recommended for production so that rotating the admin
+# password doesn't also invalidate every active session.
+SESSION_SECRET = "<SESSION_SECRET>"
+
+# Google OAuth client IDs for Teacher/Student Sign-In (see
+# https://console.cloud.google.com/apis/credentials — these are public
+# client identifiers, not secrets).
+STUDENT_GOOGLE_CLIENT_ID = "<STUDENT_GOOGLE_CLIENT_ID>"
+TEACHER_GOOGLE_CLIENT_ID = "<TEACHER_GOOGLE_CLIENT_ID>"
+
+# Must match the bucket_name set on the [[r2_buckets]] binding above.
+R2_BUCKET_NAME = "<YOUR_R2_BUCKET_NAME>"
+
+# Maximum upload size in bytes (default: 50 MiB).
 MAX_UPLOAD_SIZE = "52428800"
