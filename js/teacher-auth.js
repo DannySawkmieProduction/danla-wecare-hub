@@ -1,6 +1,3 @@
-const TEACHER_AUTH_KEY = 'danlaWeCare.teacherAuthenticated';
-const TEACHER_REGISTRATION_KEY = 'danlaWeCare.registeredTeachers';
-
 async function fetchClientConfig(){
   if(window.__WECARE_CONFIG) return window.__WECARE_CONFIG;
   try{
@@ -8,7 +5,6 @@ async function fetchClientConfig(){
     if(response.ok){
       const config = await response.json();
       window.__WECARE_CONFIG = config;
-      if(config.UPLOAD_API_KEY){ window.__UPLOAD_API_KEY = config.UPLOAD_API_KEY; }
       return config;
     }
   }catch(e){}
@@ -45,12 +41,35 @@ async function loadIntegrationHelpers(role) {
   }
 }
 
-function setTeacherAuthenticated(authenticated) {
-  sessionStorage.setItem(TEACHER_AUTH_KEY, authenticated ? 'true' : 'false');
+// Asks the server whether the current request carries a valid, unexpired
+// teacher session (the signed, HttpOnly cookie issued by
+// POST /api/auth/teacher after it verifies the Google ID token AND confirms
+// the signed-in email exists in the D1 faculty table - see workers/d1-api.js
+// and workers/auth.js). There is no client-readable "registered teacher"
+// list or "authenticated" flag left in this file: the server is the only
+// source of truth, and the cookie itself cannot be read or forged from
+// JavaScript because it is HttpOnly.
+async function isTeacherAuthenticated() {
+  try {
+    const res = await fetch('/api/auth/session', { credentials: 'same-origin' });
+    if (!res.ok) return false;
+    const data = await res.json();
+    return !!(data && data.role === 'teacher');
+  } catch (e) {
+    return false;
+  }
 }
 
-function isTeacherAuthenticated() {
-  return sessionStorage.getItem(TEACHER_AUTH_KEY) === 'true';
+// Destroys the session on the server (clears the cookie) and returns to the
+// login page.
+async function logoutTeacher() {
+  try {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+  } catch (e) {
+    // Fall through to the redirect regardless; the cookie expires on its
+    // own (max 8 hours) even if the clear request failed.
+  }
+  redirectToLogin();
 }
 
 function getCurrentPage() {
@@ -84,25 +103,6 @@ function displayStatus(message, isError = false) {
   statusText.style.color = isError ? '#F87171' : '#c8d4e2';
 }
 
-function getRegisteredTeachers() {
-  const raw = localStorage.getItem(TEACHER_REGISTRATION_KEY);
-  if (!raw) {
-    return [];
-  }
-
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (error) {
-    return [];
-  }
-}
-
-function isTeacherRegistered(email) {
-  const registered = getRegisteredTeachers();
-  return registered.includes(email.toLowerCase());
-}
-
 function loadGoogleIdentityServices() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
@@ -110,27 +110,43 @@ function loadGoogleIdentityServices() {
     script.async = true;
     script.defer = true;
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load Google Identity Services')); 
+    script.onerror = () => reject(new Error('Failed to load Google Identity Services'));
     document.head.appendChild(script);
   });
 }
 
-function handleCredentialResponse(response) {
+// Sends the Google ID token to the server for REAL verification
+// (signature, issuer, audience, expiry - via workers/auth.js's
+// verifyGoogleIdToken, which calls Google's tokeninfo endpoint) and checks
+// against the D1 faculty table. The client never decides on its own whether
+// a sign-in is valid or "registered" - it only ever reports what the server
+// decided, via the response status:
+//   200 -> session cookie issued, go to the dashboard
+//   401 -> Google credential itself was invalid/expired
+//   403 -> credential was valid but the email isn't a registered faculty member
+//   5xx -> server-side misconfiguration
+async function handleCredentialResponse(response) {
   try {
-    const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const email = payload?.email?.toLowerCase();
-    if (!email) {
-      displayStatus('Unable to read Google account details.', true);
+    const res = await fetch('/api/auth/teacher', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential })
+    });
+
+    if (res.status === 401) {
+      displayStatus('Your Google sign-in could not be verified. Please try again.', true);
       return;
     }
-
-    if (!isTeacherRegistered(email)) {
-      setTeacherAuthenticated(false);
+    if (res.status === 403) {
       displayStatus('Your account has not yet been registered. Please contact the Administrator.', true);
       return;
     }
+    if (!res.ok) {
+      displayStatus('Sign-in is not available right now. Please try again later.', true);
+      return;
+    }
 
-    setTeacherAuthenticated(true);
     redirectToDashboard();
   } catch (error) {
     displayStatus('Google sign-in failed. Please try again.', true);
@@ -140,7 +156,7 @@ function handleCredentialResponse(response) {
 window.addEventListener('DOMContentLoaded', async () => {
   await fetchClientConfig();
   const page = getCurrentPage();
-  const authenticated = isTeacherAuthenticated();
+  const authenticated = await isTeacherAuthenticated();
 
   if (page === 'teacher-login.html') {
     if (authenticated) {
@@ -185,9 +201,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     const logoutButton = document.getElementById('teacher-logout-button');
     if (logoutButton) {
-      logoutButton.addEventListener('click', () => {
-        setTeacherAuthenticated(false);
-        redirectToLogin();
+      logoutButton.addEventListener('click', async () => {
+        await logoutTeacher();
       });
     }
   }

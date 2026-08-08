@@ -1,4 +1,3 @@
-const ADMIN_AUTH_KEY = 'danlaWeCare.adminAuthenticated';
 let ADMIN_USERNAME = 'admin';
 
 async function fetchClientConfig(){
@@ -8,7 +7,6 @@ async function fetchClientConfig(){
     if(response.ok){
       const config = await response.json();
       window.__WECARE_CONFIG = config;
-      if(config.UPLOAD_API_KEY){ window.__UPLOAD_API_KEY = config.UPLOAD_API_KEY; }
       if(config.ADMIN_USERNAME){ ADMIN_USERNAME = config.ADMIN_USERNAME; }
       return config;
     }
@@ -21,6 +19,7 @@ async function authenticateAdmin(username, password){
   try{
     const response = await fetch('/api/auth/admin', {
       method:'POST',
+      credentials:'same-origin',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ username, password })
     });
@@ -59,19 +58,40 @@ async function loadIntegrationHelpers(role) {
   }
 }
 
-function hexEncode(buffer) {
-  const bytes = new Uint8Array(buffer);
-  return Array.from(bytes)
-    .map(byte => byte.toString(16).padStart(2, '0'))
-    .join('');
+// Asks the server whether the current request carries a valid, unexpired
+// admin session (the signed, HttpOnly session cookie issued by
+// POST /api/auth/admin - see workers/auth.js / workers/d1-api.js). This
+// replaces the old sessionStorage.getItem('...adminAuthenticated') === 'true'
+// check, which was only ever a client-set flag with nothing behind it: any
+// visitor could set it themselves from the browser console. There is no
+// client-readable/settable "authenticated" flag left anywhere in this file -
+// the only source of truth is the server's verification of the signed
+// cookie, which JavaScript cannot read or forge because the cookie is
+// HttpOnly.
+async function isAdminAuthenticated() {
+  try {
+    const res = await fetch('/api/auth/session', { credentials: 'same-origin' });
+    if (!res.ok) return false;
+    const data = await res.json();
+    return !!(data && data.role === 'admin');
+  } catch (e) {
+    return false;
+  }
 }
 
-function isAdminAuthenticated() {
-  return sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true';
-}
-
-function setAdminAuthenticated(authenticated) {
-  sessionStorage.setItem(ADMIN_AUTH_KEY, authenticated ? 'true' : 'false');
+// Destroys the session on the server (clears the cookie) and returns to the
+// login page. This is a real logout, not just a local flag reset: the
+// session token itself is invalidated by the server-side cookie clear, so
+// it can no longer be used even if it had been copied elsewhere.
+async function logoutAdmin() {
+  try {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+  } catch (e) {
+    // Even if the network call fails, still send the user back to login;
+    // the cookie will simply expire on its own (max 8 hours) if it
+    // couldn't be cleared immediately.
+  }
+  redirectToLogin();
 }
 
 function getCurrentPage() {
@@ -118,7 +138,7 @@ function clearStatus() {
 window.addEventListener('DOMContentLoaded', async () => {
   await fetchClientConfig();
   const page = getCurrentPage();
-  const authenticated = isAdminAuthenticated();
+  const authenticated = await isAdminAuthenticated();
 
   if (page === 'admin-login.html') {
     if (authenticated) {
@@ -146,7 +166,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         const valid = await authenticateAdmin(username, password);
         if (valid) {
-          setAdminAuthenticated(true);
+          // The server has already set the signed session cookie in its
+          // response (Set-Cookie), so there is nothing further to store
+          // client-side before moving on.
           redirectToDashboard();
           return;
         }
@@ -164,9 +186,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     const logoutButton = document.getElementById('admin-logout-button');
     if (logoutButton) {
-      logoutButton.addEventListener('click', () => {
-        setAdminAuthenticated(false);
-        redirectToLogin();
+      logoutButton.addEventListener('click', async () => {
+        await logoutAdmin();
       });
     }
   }
