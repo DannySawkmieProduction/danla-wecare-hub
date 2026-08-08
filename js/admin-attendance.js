@@ -161,7 +161,7 @@ function bindAttendanceActions(){ const el=document.getElementById('attendance-l
 
 function initializeAttendance(){ const newBtn=document.getElementById('new-attendance-button'); const search=document.getElementById('attendance-search-input'); const logout=document.getElementById('admin-logout-button'); newBtn?.addEventListener('click', ()=>openAttendanceForm()); search?.addEventListener('input', ()=>renderAttendanceList(filterAttendance(getAttendance()))); logout?.addEventListener('click', ()=>{ sessionStorage.setItem('danlaWeCare.adminAuthenticated','false'); window.location.replace('admin-login.html'); }); bindAttendanceActions(); renderAttendanceList(filterAttendance(getAttendance())); }
 
-window.addEventListener('DOMContentLoaded', ()=>{ if(typeof isAdminAuthenticated==='function' && !isAdminAuthenticated()){ if(typeof redirectToLogin==='function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeAttendance(); });
+window.addEventListener('DOMContentLoaded', async ()=>{ if(typeof isAdminAuthenticated==='function' && !(await isAdminAuthenticated())){ if(typeof redirectToLogin==='function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeAttendance(); });
 
 // --- CSV export/import and calendar summary ---
 // --- CSV export/import with strict validation and calendar month view ---

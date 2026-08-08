@@ -215,4 +215,4 @@ window.addEventListener('DOMContentLoaded', ()=>{
   const importInput = document.getElementById('import-assignments-input'); importInput?.addEventListener('change', e=>{ const f=e.target.files[0]; if(f) importAssignmentsCSVFile(f); importInput.value=''; });
 });
 
-window.addEventListener('DOMContentLoaded', ()=>{ if(typeof isAdminAuthenticated === 'function' && !isAdminAuthenticated()){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeAssignments(); });
+window.addEventListener('DOMContentLoaded', async ()=>{ if(typeof isAdminAuthenticated === 'function' && !(await isAdminAuthenticated())){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeAssignments(); });

@@ -219,7 +219,7 @@ function initializeExamManagement(){
   bindExamActions(); renderExamList(filterExams(getExams()));
 }
 
-window.addEventListener('DOMContentLoaded', ()=>{
-  if(typeof isAdminAuthenticated === 'function' && !isAdminAuthenticated()){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; }
+window.addEventListener('DOMContentLoaded', async ()=>{
+  if(typeof isAdminAuthenticated === 'function' && !(await isAdminAuthenticated())){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; }
   initializeExamManagement();
 });

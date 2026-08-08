@@ -134,4 +134,4 @@ function initializeNotices(){ const newBtn = document.getElementById('new-notice
   buildFilterOptions(); const items = getNotices(); renderNoticeList(filterNotices(items)); bindNoticeActions(); buildStats(items);
 }
 
-window.addEventListener('DOMContentLoaded', ()=>{ if(typeof isAdminAuthenticated === 'function' && !isAdminAuthenticated()){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeNotices(); });
+window.addEventListener('DOMContentLoaded', async ()=>{ if(typeof isAdminAuthenticated === 'function' && !(await isAdminAuthenticated())){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeNotices(); });

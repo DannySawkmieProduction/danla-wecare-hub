@@ -186,7 +186,7 @@ function initializeMarksManagement(){ const newBtn = document.getElementById('ne
 
   buildSelectOptions(); const marks = getMarks(); calculateRanks(marks); renderMarksList(filterAndSortMarks(marks)); bindMarkActions(); }
 
-window.addEventListener('DOMContentLoaded', ()=>{ if(typeof isAdminAuthenticated === 'function' && !isAdminAuthenticated()){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeMarksManagement(); });
+window.addEventListener('DOMContentLoaded', async ()=>{ if(typeof isAdminAuthenticated === 'function' && !(await isAdminAuthenticated())){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeMarksManagement(); });
 
 // --- CSV export/import ---
 const MARKS_HEADER = ['id','examId','examName','studentId','studentName','className','subject','internalMarks','externalMarks','practicalMarks','maxMarks','passingMarks','total','percentage','grade','gpa','pass','rank','remarks','createdAt','updatedAt'];

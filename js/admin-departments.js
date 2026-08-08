@@ -240,8 +240,8 @@ function initializeDepartmentManagement() {
   renderDepartmentList(filterDepartments(getDepartments()));
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  if (typeof isAdminAuthenticated === 'function' && !isAdminAuthenticated()) {
+window.addEventListener('DOMContentLoaded', async () => {
+  if (typeof isAdminAuthenticated === 'function' && !(await isAdminAuthenticated())) {
     if (typeof redirectToLogin === 'function') {
       redirectToLogin();
       return;

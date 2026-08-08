@@ -163,4 +163,4 @@ function initializeResources(){ const newBtn = document.getElementById('new-reso
   buildFilterOptions(); const items = getResources(); renderResourceList(filterResources(items)); bindResourceActions(); buildStats(items);
 }
 
-window.addEventListener('DOMContentLoaded', ()=>{ if(typeof isAdminAuthenticated === 'function' && !isAdminAuthenticated()){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeResources(); });
+window.addEventListener('DOMContentLoaded', async ()=>{ if(typeof isAdminAuthenticated === 'function' && !(await isAdminAuthenticated())){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeResources(); });

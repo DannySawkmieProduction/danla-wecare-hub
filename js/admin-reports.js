@@ -78,4 +78,4 @@ function initializeReports(){ const runBtn = document.getElementById('run-report
 
 function renderAll(){ buildCards(); renderEnrollmentChart(); renderAttendanceChart(); renderMarksChart(); renderFacultyChart(); }
 
-window.addEventListener('DOMContentLoaded', ()=>{ if(typeof isAdminAuthenticated === 'function' && !isAdminAuthenticated()){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeReports(); });
+window.addEventListener('DOMContentLoaded', async ()=>{ if(typeof isAdminAuthenticated === 'function' && !(await isAdminAuthenticated())){ if(typeof redirectToLogin === 'function'){ redirectToLogin(); return; } window.location.replace('admin-login.html'); return; } initializeReports(); });
