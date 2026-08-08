@@ -8,6 +8,14 @@ import {
   forbidden,
   verifyGoogleIdToken
 } from './auth.js';
+import {
+  isAllowedType,
+  sanitizeFilename,
+  buildObjectKey,
+  maxUploadBytes,
+  canReadObject,
+  canModifyObject
+} from './r2.js';
 
 async function hexEncode(buffer){ const bytes = new Uint8Array(buffer); return Array.from(bytes).map(byte => byte.toString(16).padStart(2,'0')).join(''); }
 
@@ -16,10 +24,26 @@ async function verifyAdminPassword(password, env){ const raw = await crypto.subt
 function getClientConfig(env){ return {
   STUDENT_GOOGLE_CLIENT_ID: env.STUDENT_GOOGLE_CLIENT_ID || '',
   TEACHER_GOOGLE_CLIENT_ID: env.TEACHER_GOOGLE_CLIENT_ID || '',
-  UPLOAD_API_KEY: env.UPLOAD_API_KEY || '',
-  R2_BUCKET_NAME: env.R2_BUCKET_NAME || '',
   MAX_UPLOAD_SIZE: env.MAX_UPLOAD_SIZE || '52428800'
 }; }
+
+// ---------------------------------------------------------------------------
+// Environment / binding validation
+//
+// Every route that depends on a binding (D1, R2) or a piece of required
+// configuration checks for it explicitly before touching it, and returns a
+// clean 500 JSON error identifying exactly what's missing rather than
+// letting an unhandled exception surface Cloudflare's generic error page.
+// This lets the rest of the API keep working even if one binding is
+// missing or misconfigured (e.g. R2 not yet provisioned shouldn't take down
+// admin login or D1-backed routes, and vice versa).
+// ---------------------------------------------------------------------------
+function requireBinding(env, key, label){
+  if(!env[key]){
+    return jsonResponse({ error: `${label} is not configured. Set the '${key}' binding for this Cloudflare Pages project (Settings -> Functions -> Bindings, or wrangler.toml) and redeploy.` }, 500);
+  }
+  return null;
+}
 
 // ---------------------------------------------------------------------------
 // /api/table/:table authorization policy
@@ -68,6 +92,29 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // -------------------------------------------------------------------
+    // Static asset passthrough.
+    //
+    // This worker is deployed as a Cloudflare Pages "Advanced Mode"
+    // _worker.js (see /_worker.js at the project root), which means every
+    // request to the Pages project - not just /api/* - is routed through
+    // this fetch handler first. Anything that isn't an API call is handed
+    // straight to Pages' static asset serving (env.ASSETS), which is what
+    // actually serves the HTML/CSS/JS site. This is what lets the whole
+    // project - static site AND API - deploy as a single Cloudflare Pages
+    // project with no separate Worker, no custom domain/zone, and no
+    // Worker Route to configure.
+    // -------------------------------------------------------------------
+    if(!url.pathname.startsWith('/api/')){
+      if(env.ASSETS && typeof env.ASSETS.fetch === 'function'){
+        return env.ASSETS.fetch(request);
+      }
+      // No ASSETS binding available (e.g. this module was invoked directly
+      // as a plain Worker rather than through Cloudflare Pages). Fail
+      // gracefully instead of throwing.
+      return new Response('Not Found', { status: 404 });
+    }
+
     // ---- Public, unauthenticated endpoints ----
 
     if(url.pathname === '/api/ping'){
@@ -77,6 +124,10 @@ export default {
     if(url.pathname === '/api/client-config' && request.method === 'GET'){
       return jsonResponse(getClientConfig(env), 200);
     }
+
+    // Every route below this point needs the D1 binding.
+    const dbCheck = requireBinding(env, 'DB', 'The D1 database');
+    if(dbCheck) return dbCheck;
 
     // ---- Admin login: verifies credentials and issues a signed session cookie ----
     if(url.pathname === '/api/auth/admin' && request.method === 'POST'){
@@ -145,9 +196,7 @@ export default {
       return jsonResponse({ role: session.role, sub: session.sub }, 200);
     }
 
-    // ---- Full database dump: admin only. This previously had no
-    //      authentication at all and was fetched automatically on public
-    //      pages; it is now the single most tightly restricted endpoint. ----
+    // ---- Full database dump: admin only. ----
     if(url.pathname === '/api/dump'){
       const session = await getSession(request, env);
       if(!session){ return unauthorized(); }
@@ -160,9 +209,8 @@ export default {
       }catch(e){ return jsonResponse({error:e.message}, 500); }
     }
 
-    // ---- Generic kv endpoints: kv_store mirrors bulk institutional data
-    //      (faculty lists, student lists, etc. as JSON blobs) with no safe
-    //      per-role scoping possible, so it is admin-only for every method. ----
+    // ---- Generic kv endpoints: admin-only for every method (see Phase 2
+    //      report for why kv_store cannot be safely scoped by role). ----
     if(url.pathname.startsWith('/api/kv/')){
       const session = await getSession(request, env);
       if(!session){ return unauthorized(); }
@@ -183,8 +231,111 @@ export default {
       }
     }
 
-    // ---- Generic table endpoints: simplistic CRUD (table names must match
-    //      schema), now gated per-table by classifyTable() above. ----
+    // ---- Integrated R2 file storage ----
+    //
+    // Merged in from what used to be a separate, never-deployed
+    // workers/r2-api.js (see the Phase 0 and Phase 4 audits). Authorization
+    // now uses the same real session cookie as everything else in this
+    // file, instead of a shared X-Api-Key that was exposed to every visitor
+    // via /api/client-config.
+    if(url.pathname === '/api/r2/upload' && request.method === 'POST'){
+      const session = await getSession(request, env);
+      if(!session){ return unauthorized(); }
+      const r2Check = requireBinding(env, 'R2_BUCKET', 'R2 file storage');
+      if(r2Check) return r2Check;
+      try{
+        const form = await request.formData();
+        const file = form.get('file');
+        const purpose = form.get('purpose') || 'generic';
+        if(!file){ return jsonResponse({error:'No file provided'}, 400); }
+        const contentType = file.type || 'application/octet-stream';
+        if(!isAllowedType(contentType)){ return jsonResponse({error:'File type not allowed'}, 400); }
+        const buf = await file.arrayBuffer();
+        const size = buf.byteLength;
+        const maxBytes = maxUploadBytes(env);
+        if(size > maxBytes){ return jsonResponse({error:'File too large'}, 413); }
+
+        const sanitized = sanitizeFilename(file.name);
+        const objectKey = buildObjectKey(purpose, sanitized);
+        await env.R2_BUCKET.put(objectKey, buf, { httpMetadata: { contentType }, customMetadata: { filename: sanitized, uploader_id: session.sub, uploader_role: session.role } });
+
+        const id = crypto.randomUUID();
+        const created_at = Date.now();
+        await env.DB.prepare('INSERT INTO r2_objects(id, object_key, bucket_name, filename, content_type, size, purpose, uploader_id, uploader_role, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)')
+          .run(id, objectKey, env.R2_BUCKET_NAME || 'default', sanitized, contentType, size, purpose, session.sub, session.role, created_at);
+
+        return jsonResponse({ id, object_key: objectKey, filename: sanitized, content_type: contentType, size, purpose, created_at }, 201);
+      }catch(e){ return jsonResponse({error:e.message}, 500); }
+    }
+
+    const r2Match = url.pathname.match(/^\/api\/r2\/(meta|download|replace|delete)\/(.+)$/);
+    if(r2Match){
+      const op = r2Match[1]; const id = decodeURIComponent(r2Match[2]);
+      const session = await getSession(request, env);
+      if(!session){ return unauthorized(); }
+
+      try{
+        if(op === 'meta' && request.method === 'GET'){
+          const row = await env.DB.prepare('SELECT * FROM r2_objects WHERE id = ?').first(id);
+          if(!row){ return jsonResponse(null, 200); }
+          if(!canReadObject(row, session)){ return forbidden('You do not have permission to view this file.'); }
+          return jsonResponse(row, 200);
+        }
+
+        if(op === 'download' && request.method === 'GET'){
+          const row = await env.DB.prepare('SELECT * FROM r2_objects WHERE id = ?').first(id);
+          if(!row){ return new Response('Not found', { status: 404 }); }
+          if(!canReadObject(row, session)){ return forbidden('You do not have permission to download this file.'); }
+          const r2Check = requireBinding(env, 'R2_BUCKET', 'R2 file storage');
+          if(r2Check) return r2Check;
+          const obj = await env.R2_BUCKET.get(row.object_key);
+          if(!obj || !obj.body){ return new Response('Object not found', { status: 404 }); }
+          return new Response(obj.body, { status: 200, headers: {
+            'Content-Type': row.content_type,
+            'Content-Disposition': `attachment; filename="${row.filename}"`
+          }});
+        }
+
+        if(op === 'delete' && request.method === 'DELETE'){
+          const row = await env.DB.prepare('SELECT * FROM r2_objects WHERE id = ?').first(id);
+          if(!row){ return jsonResponse({error:'Not found'}, 404); }
+          if(!canModifyObject(row, session)){ return forbidden('You do not have permission to delete this file.'); }
+          const r2Check = requireBinding(env, 'R2_BUCKET', 'R2 file storage');
+          if(r2Check) return r2Check;
+          await env.R2_BUCKET.delete(row.object_key);
+          await env.DB.prepare('DELETE FROM r2_objects WHERE id = ?').run(id);
+          return jsonResponse({ok:true}, 200);
+        }
+
+        if(op === 'replace' && (request.method === 'POST' || request.method === 'PUT')){
+          const row = await env.DB.prepare('SELECT * FROM r2_objects WHERE id = ?').first(id);
+          if(!row){ return jsonResponse({error:'Not found'}, 404); }
+          if(!canModifyObject(row, session)){ return forbidden('You do not have permission to replace this file.'); }
+          const r2Check = requireBinding(env, 'R2_BUCKET', 'R2 file storage');
+          if(r2Check) return r2Check;
+
+          const form = await request.formData();
+          const file = form.get('file');
+          if(!file){ return jsonResponse({error:'No file provided'}, 400); }
+          const contentType = file.type || 'application/octet-stream';
+          if(!isAllowedType(contentType)){ return jsonResponse({error:'File type not allowed'}, 400); }
+          const buf = await file.arrayBuffer();
+          const size = buf.byteLength;
+          const maxBytes = maxUploadBytes(env);
+          if(size > maxBytes){ return jsonResponse({error:'File too large'}, 413); }
+
+          await env.R2_BUCKET.delete(row.object_key);
+          const sanitized = sanitizeFilename(file.name);
+          const newKey = buildObjectKey(row.purpose, sanitized);
+          await env.R2_BUCKET.put(newKey, buf, { httpMetadata: { contentType }, customMetadata: { filename: sanitized, uploader_id: row.uploader_id, uploader_role: row.uploader_role || '' } });
+          await env.DB.prepare('UPDATE r2_objects SET object_key=?, filename=?, content_type=?, size=?, created_at=? WHERE id=?')
+            .run(newKey, sanitized, contentType, size, Date.now(), id);
+          return jsonResponse({ok:true, id, object_key:newKey, filename:sanitized, size}, 200);
+        }
+      }catch(e){ return jsonResponse({error:e.message}, 500); }
+    }
+
+    // ---- Generic table endpoints ----
     const match = url.pathname.match(/^\/api\/table\/([a-z_]+)(?:\/(.*))?$/);
     if(match){
       const table = match[1]; const id = match[2];
